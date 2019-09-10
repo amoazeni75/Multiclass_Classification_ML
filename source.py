@@ -25,3 +25,28 @@ dataframe = pandas.read_csv("iris.csv", header=None)
 dataset = dataframe.values
 X = dataset[:,0:4].astype(float)
 Y = dataset[:,4]
+
+"""
+When modeling multiclass classification problems using neural networks, it is good practice to 
+reshape the output attribute from a vector that contains values for each class value to be a 
+matrix with a boolean for each class value and whether or not a given instance has that class 
+value or not. This is called one hot encoding or creating dummy variables from a categorical variabl
+"""
+# encode class values as integers
+encoder = LabelEncoder()
+encoder.fit(Y)
+encoded_Y = encoder.transform(Y)
+
+# convert integers to dummy variables (i.e. one hot encoded)
+dummy_y = np_utils.to_categorical(encoded_Y)
+
+
+# define baseline model
+def baseline_model():
+    # create model
+    model = Sequential()
+    model.add(Dense(4, input_dim=4, init= 'normal' , activation= 'relu' ))
+    model.add(Dense(3, init= 'normal' , activation= 'sigmoid' ))
+    # Compile model
+    model.compile(loss= 'categorical_crossentropy' , optimizer= 'adam' , metrics=[ 'accuracy' ])
+    return model
