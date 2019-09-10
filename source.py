@@ -42,11 +42,25 @@ dummy_y = np_utils.to_categorical(encoded_Y)
 
 
 # define baseline model
+"""
+Fully connected network with one hidden layer which contains 4 neurons.
+The hidden layer uses a rectifier activation function which is a good practice. Because we used 
+a one-hot encoding for our iris dataset, the output layer must create 3 output values, one for 
+each class. The output value with the largest value will be taken as the class predicted by the model. 
+"""
 def baseline_model():
     # create model
     model = Sequential()
-    model.add(Dense(4, input_dim=4, init= 'normal' , activation= 'relu' ))
-    model.add(Dense(3, init= 'normal' , activation= 'sigmoid' ))
+    model.add(Dense(4, kernel_initializer= 'normal' , activation= 'relu' ,input_dim=4))
+    model.add(Dense(3, kernel_initializer= 'normal' , activation= 'sigmoid' ))
     # Compile model
     model.compile(loss= 'categorical_crossentropy' , optimizer= 'adam' , metrics=[ 'accuracy' ])
     return model
+
+estimator = KerasClassifier(build_fn=baseline_model, nb_epoch=200, batch_size=15, verbose=0)
+
+# Define the model evaluation procedure
+kfold = KFold(n_splits=10, shuffle=True, random_state=seed)
+
+results = cross_val_score(estimator, X, dummy_y, cv=kfold)
+print("Accuracy: %.2f%% (%.2f%%)" % (results.mean()*100, results.std()*100))
