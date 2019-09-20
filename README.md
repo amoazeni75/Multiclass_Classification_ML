@@ -41,3 +41,6 @@ iris species. The attributes for this dataset can be summarized as follows:
     Class.
   </li>
  </ol>
+
+<p>tutorial source: Deep Learning With Python, Develop Deep Learning Models On Theano And TensorFlow Using
+Keras, Jason Brownlee</p>
